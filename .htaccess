@@ -1,0 +1,120 @@
+RewriteEngine on
+RewriteRule ^krzyzowki/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^Kalendarz%20adwentowy/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^labirynty/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^rebusy/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^rownania/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^roznice/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^sudoku/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^wszystko/(.*)$ wszystko.php?$1 [NC,L]
+RewriteRule ^nowosci/(.*)$ nowosci.php?$1 [NC,L]
+RewriteRule ^wielkanoc/(.*)$ wielkanoc.php?$1 [NC,L]
+RewriteRule ^wiosna/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^lato/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^szkola/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^tag/(.*)$ tag.php?$1 [NC,L]
+RewriteRule ^kim_jest_rudy/(.*)$ kim-jest-rudy.php?$1 [NC,L]
+RewriteRule ^puzzle/(.*)$ puzzle.php?$1 [NC,L]
+RewriteRule ^zima/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^matematyka/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^kolorowanki/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^las/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^jesien/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^generatory/$ generatory/index.php?$1 [NC,L]
+RewriteRule ^literaki/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^polacz/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^wykreslanki/(.*)$ kategorie.php?$1 [NC,L]
+RewriteRule ^gry/161/(.*)$ gry/dobble/index.php?$1 [NC,L]
+RewriteRule ^gry/1/(.*)$ gry/lapki/index.php?$1 [NC,L]
+RewriteRule ^gry/3/(.*)$ gry/lapki/index.php?$1 [NC,L]
+RewriteRule ^gry/pilkarzyki/(.*)$ gry/lapki/index.php?$1 [NC,L]
+RewriteRule ^gry/4/(.*)$ gry/lapki/index.php?$1 [NC,L]
+RewriteRule ^gry/5/(.*)$ gry/lapki/index.php?$1 [NC,L]
+RewriteRule ^gry/6/(.*)$ gry/lapki/index.php?$1 [NC,L]
+RewriteRule ^gry/8/(.*)$ gry/lapki/index.php?$1 [NC,L]
+RewriteRule ^gry_od_rudego/(.*)$ gry/index.php?$1 [NC,L]
+RewriteRule ^gry/2/(.*)$ gry/magazyn-rudego/index.php?$1 [NC,L]
+#RewriteRule ^gry/super-rudy/(.*)$ gry/super-rudy/index.php?$1 [NC,L]
+RewriteRule ^upload/dodaj-labirynty/(.*)$ upload/dodaj/index.php?$1 [NC,L]
+
+
+# Force trailing slash
+<IfModule mod_rewrite.c>
+	RewriteCond %{REQUEST_URI} /+[^\.]+$
+	RewriteRule ^(.+[^/])$ %{REQUEST_URI}/ [R=301,L]
+</IfModule>
+
+
+#ErrorDocument 400 http://localhost/400.php
+#ErrorDocument 401 http://localhost/401.php
+#ErrorDocument 403 http://localhost/403.php
+#ErrorDocument 404 http://localhost/404.php
+#ErrorDocument 500 http://localhost/500.php
+
+RewriteCond %{THE_REQUEST} ^.*/index\.(php|html)
+RewriteRule ^(.*)index.(php|html)$ /$1 [R=301,L]
+
+Redirect 301 /pozostale/ http://localhost/wszystko/
+Redirect 301 /pokoloruj/ http://localhost/kolorowanki/
+Redirect 301 /rownania/ http://localhost/matematyka/
+
+
+Header add Access-Control-Allow-Origin "localhost"
+Header set Access-Control-Allow-Origin *
+
+
+
+<ifModule mod_gzip.c>
+mod_gzip_on Yes
+mod_gzip_dechunk Yes
+mod_gzip_item_include file .(html?|txt|css|js|php|pl)$
+mod_gzip_item_include handler ^cgi-script$
+mod_gzip_item_include mime ^text/.*
+mod_gzip_item_include mime ^application/x-javascript.*
+mod_gzip_item_exclude mime ^image/.*
+mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
+</ifModule>
+
+##Tweaks##
+#Header always set X-Frame-Options "DENY"
+Header set X-Frame-Options SAMEORIGIN
+
+
+## EXPIRES CACHING ##
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType image/jpg "access 1 year"
+ExpiresByType image/jpeg "access 1 year"
+ExpiresByType image/gif "access 1 year"
+ExpiresByType image/png "access 1 year"
+ExpiresByType text/css "access 1 month"
+ExpiresByType text/html "access 1 month"
+ExpiresByType application/pdf "access 1 month"
+ExpiresByType text/x-javascript "access 1 month"
+ExpiresByType application/x-shockwave-flash "access 1 month"
+ExpiresByType image/x-icon "access 1 year"
+ExpiresDefault "access 1 month"
+</IfModule>
+## EXPIRES CACHING ##
+
+<IfModule mod_headers.c>
+    Header set Connection keep-alive
+    <filesmatch "\.(ico|flv|gif|swf|eot|woff|otf|ttf|svg)$">
+        Header set Cache-Control "max-age=2592000, public"
+    </filesmatch>
+    <filesmatch "\.(jpg|jpeg|png)$">
+        Header set Cache-Control "max-age=1209600, public"
+    </filesmatch>
+    # css and js should use private for proxy caching https://developers.google.com/speed/docs/best-practices/caching#LeverageProxyCaching
+    <filesmatch "\.(css)$">
+        Header set Cache-Control "max-age=31536000, private"
+    </filesmatch>
+    <filesmatch "\.(js)$">
+        Header set Cache-Control "max-age=1209600, private"
+    </filesmatch>
+    <filesMatch "\.(x?html?|php)$">
+        Header set Cache-Control "max-age=600, private, must-revalidate"
+      </filesMatch>
+</IfModule>
+
+
